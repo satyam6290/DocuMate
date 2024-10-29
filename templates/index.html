@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Chat System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Document Chat System</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-section">
+            <h2>Upload Document</h2>
+            <form action="{{ url_for('upload_document') }}" method="post" enctype="multipart/form-data">
+                <input type="text" name="chat_name" placeholder="Chat Name" required>
+                <input type="file" name="file" accept="application/pdf" required>
+                <button type="submit">Upload and Index</button>
+            </form>
+        </div>
+
+        <div class="query-section">
+            <h2>Ask a Question</h2>
+            <form action="{{ url_for('query_document') }}" method="post">
+                <input type="text" name="query_chat_name" placeholder="Chat Name" required>
+                <input type="text" name="question" placeholder="Your Question" required>
+                <button type="submit">Submit Query</button>
+                {% if answer %}
+                <div class="answer-section">
+                    <h3>Answer:</h3>
+                    <p>{{ answer }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
